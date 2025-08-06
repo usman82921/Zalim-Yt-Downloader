@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>YouTube Downloader</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <img src="https://iili.io/FPkPOy7.jpg" class="logo" />
+    <h1>YouTube Audio & Video Downloader</h1>
+    <input type="text" id="urlInput" placeholder="🔗 Paste YouTube Link Here" />
+    <div class="btns">
+      <button onclick="download('mp3')">Download MP3</button>
+      <button onclick="download('mp4')">Download MP4</button>
+    </div>
+    <div id="status"></div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
