@@ -8,15 +8,64 @@
 </head>
 <body>
   <div class="container">
-    <img src="https://iili.io/FPkPOy7.jpg" class="logo" />
-    <h1>YouTube Audio & Video Downloader</h1>
-    <input type="text" id="urlInput" placeholder="🔗 Paste YouTube Link Here" />
-    <div class="btns">
-      <button onclick="download('mp3')">Download MP3</button>
-      <button onclick="download('mp4')">Download MP4</button>
-    </div>
-    <div id="status"></div>
+    <img src="https://iili.io/FPkPOy7.jpg" alt="Logo" class="logo" />
+    <h1>YouTube Video & Audio Downloader</h1>
+
+    <form id="downloadForm">
+      <input type="text" id="youtubeUrl" placeholder="Paste YouTube URL here..." required />
+      <div class="btn-group">
+        <button type="button" onclick="downloadMP3()">🎵 Download MP3</button>
+        <button type="button" onclick="downloadMP4()">🎬 Download MP4</button>
+      </div>
+    </form>
+
+    <div id="loading" class="hidden">⏳ Processing, please wait...</div>
+    <div id="error" class="error hidden">❌ Error occurred while fetching.</div>
   </div>
-  <script src="script.js"></script>
+
+  <script>
+    async function downloadMP3() {
+      await handleDownload("mp3");
+    }
+
+    async function downloadMP4() {
+      await handleDownload("mp4");
+    }
+
+    async function handleDownload(type) {
+      const url = document.getElementById("youtubeUrl").value.trim();
+      const loading = document.getElementById("loading");
+      const error = document.getElementById("error");
+
+      if (!url) return;
+
+      loading.classList.remove("hidden");
+      error.classList.add("hidden");
+
+      let apiUrl = "";
+      if (type === "mp3") {
+        apiUrl = `https://ytdownloader.anshppt19.workers.dev/?url=${encodeURIComponent(url)}`;
+      } else {
+        apiUrl = `https://youtube.anshppt19.workers.dev/anshapi?url=${encodeURIComponent(url)}&format=mp4hd`;
+      }
+
+      try {
+        const res = await fetch(apiUrl);
+        const data = await res.json();
+
+        if (type === "mp3" && data.status === "success") {
+          window.open(data.download_url, "_blank");
+        } else if (type === "mp4" && data.success && data.data?.url_mp4_youtube) {
+          window.open(data.data.url_mp4_youtube, "_blank");
+        } else {
+          throw new Error("Invalid response");
+        }
+      } catch (e) {
+        error.classList.remove("hidden");
+      } finally {
+        loading.classList.add("hidden");
+      }
+    }
+  </script>
 </body>
 </html>
