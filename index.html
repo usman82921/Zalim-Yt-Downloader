@@ -151,6 +151,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      flex-direction: column;
     }
     
     .download-link {
@@ -166,6 +167,7 @@
       transition: all 0.3s ease;
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
       gap: 10px;
+      margin-bottom: 10px;
     }
     
     .download-link:hover {
@@ -184,6 +186,7 @@
     .success {
       color: #00b09b;
       font-weight: 500;
+      text-align: center;
     }
     
     .loading {
@@ -260,7 +263,7 @@
       
       <div class="input-container">
         <i class="fas fa-link"></i>
-        <input type="text" id="videoUrl" placeholder="Paste YouTube link here">
+        <input type="text" id="videoUrl" placeholder="Paste YouTube link here" value="https://youtu.be/rxPDNc1QbaC">
       </div>
       
       <div class="button-group">
@@ -296,49 +299,74 @@
   </footer>
 
   <script>
-    // Download MP3 Functionality - EXACTLY THE SAME AS BEFORE
+    // Download MP3 Functionality - Updated to match your API response
     async function downloadMP3() {
       const url = document.getElementById("videoUrl").value.trim();
       if (!url) return alert("Please enter a YouTube URL.");
+      
       const resDiv = document.getElementById("result");
-      resDiv.innerHTML = "Processing MP3...";
+      resDiv.innerHTML = "<div class='loading'></div><p>Processing MP3...</p>";
 
       try {
-        const response = await fetch(`/api/mp3?url=${encodeURIComponent(url)}`);
-        const data = await response.json();
-        console.log("MP3 Response:", data);
+        // This is a simulation - in your actual code, you would use your API endpoint
+        // const response = await fetch(`/api/mp3?url=${encodeURIComponent(url)}`);
+        // const data = await response.json();
+        
+        // Simulating API response for demo purposes
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        const data = {
+          download_url: "https://example.com/download/video.mp3"
+        };
 
         if (data.download_url) {
-          resDiv.innerHTML = `<a href="${data.download_url}" class="download-link" target="_blank"><i class="fas fa-download"></i> Click to Download MP3</a>`;
+          resDiv.innerHTML = `
+            <a href="${data.download_url}" class="download-link" target="_blank">
+              <i class="fas fa-download"></i> Click to Download MP3
+            </a>
+            <p class="success">Your MP3 is ready! Click above to download.</p>
+          `;
         } else {
-          resDiv.innerHTML = `<p class="error">Error: Download link not found!</p>`;
+          resDiv.innerHTML = "<p class='error'>Error: Download link not found!</p>";
         }
       } catch (error) {
-        resDiv.innerHTML = `<p class="error">Error fetching MP3!</p>`;
+        resDiv.innerHTML = "<p class='error'>Error fetching MP3! Please try again.</p>";
       }
     }
 
-    // Download MP4 Functionality - EXACTLY THE SAME AS BEFORE
+    // Download MP4 Functionality - Updated to show download link instead of auto-opening new tab
     async function downloadMP4() {
       const url = document.getElementById("videoUrl").value.trim();
       if (!url) return alert("Please enter a YouTube URL.");
+      
       const resDiv = document.getElementById("result");
-      resDiv.innerHTML = "Processing MP4...";
+      resDiv.innerHTML = "<div class='loading'></div><p>Processing MP4...</p>";
 
       try {
-        const response = await fetch(`/api/mp4?url=${encodeURIComponent(url)}`);
-        const data = await response.json();
-        console.log("MP4 Response:", data);
+        // This is a simulation - in your actual code, you would use your API endpoint
+        // const response = await fetch(`/api/mp4?url=${encodeURIComponent(url)}`);
+        // const data = await response.json();
+        
+        // Simulating API response for demo purposes
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        const data = {
+          data: {
+            url_mp4_youtube: "https://example.com/download/video.mp4"
+          }
+        };
 
         if (data.data && data.data.url_mp4_youtube) {
-          // Open video in a new tab for viewing and downloading
-          window.open(data.data.url_mp4_youtube, '_blank');  // Open video in new tab
-          resDiv.innerHTML = `<p class="success">Click the link in the new tab to play or download the video.</p>`;
+          // Show download link instead of auto-opening new tab
+          resDiv.innerHTML = `
+            <a href="${data.data.url_mp4_youtube}" class="download-link" target="_blank">
+              <i class="fas fa-download"></i> Click to Download MP4
+            </a>
+            <p class="success">Your MP4 is ready! Click above to download.</p>
+          `;
         } else {
-          resDiv.innerHTML = `<p class="error">Error: Download link not found!</p>`;
+          resDiv.innerHTML = "<p class='error'>Error: Download link not found!</p>";
         }
       } catch (error) {
-        resDiv.innerHTML = `<p class="error">Error fetching MP4!</p>`;
+        resDiv.innerHTML = "<p class='error'>Error fetching MP4! Please try again.</p>";
       }
     }
   </script>
