@@ -299,24 +299,17 @@
   </footer>
 
   <script>
-    // Download MP3 Functionality - Updated to match your API response
+    // Download MP3 Functionality - EXACTLY THE SAME AS BEFORE
     async function downloadMP3() {
       const url = document.getElementById("videoUrl").value.trim();
       if (!url) return alert("Please enter a YouTube URL.");
-      
       const resDiv = document.getElementById("result");
       resDiv.innerHTML = "<div class='loading'></div><p>Processing MP3...</p>";
 
       try {
-        // This is a simulation - in your actual code, you would use your API endpoint
-        // const response = await fetch(`/api/mp3?url=${encodeURIComponent(url)}`);
-        // const data = await response.json();
-        
-        // Simulating API response for demo purposes
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        const data = {
-          download_url: "https://example.com/download/video.mp3"
-        };
+        const response = await fetch(`/api/mp3?url=${encodeURIComponent(url)}`);
+        const data = await response.json();
+        console.log("MP3 Response:", data);
 
         if (data.download_url) {
           resDiv.innerHTML = `
@@ -333,26 +326,17 @@
       }
     }
 
-    // Download MP4 Functionality - Updated to show download link instead of auto-opening new tab
+    // Download MP4 Functionality - MODIFIED to show download link instead of auto-opening new tab
     async function downloadMP4() {
       const url = document.getElementById("videoUrl").value.trim();
       if (!url) return alert("Please enter a YouTube URL.");
-      
       const resDiv = document.getElementById("result");
       resDiv.innerHTML = "<div class='loading'></div><p>Processing MP4...</p>";
 
       try {
-        // This is a simulation - in your actual code, you would use your API endpoint
-        // const response = await fetch(`/api/mp4?url=${encodeURIComponent(url)}`);
-        // const data = await response.json();
-        
-        // Simulating API response for demo purposes
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        const data = {
-          data: {
-            url_mp4_youtube: "https://example.com/download/video.mp4"
-          }
-        };
+        const response = await fetch(`/api/mp4?url=${encodeURIComponent(url)}`);
+        const data = await response.json();
+        console.log("MP4 Response:", data);
 
         if (data.data && data.data.url_mp4_youtube) {
           // Show download link instead of auto-opening new tab
