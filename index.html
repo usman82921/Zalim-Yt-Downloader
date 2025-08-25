@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Free YouTube to MP3 & MP4</title>
+  <title>Free YouTube Converter</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     body {
@@ -72,9 +72,13 @@
       outline: none;
       font-size: 16px;
     }
-    .convert-btn {
+    .btn-group {
+      display: flex;
+      gap: 10px;
       margin-top: 14px;
-      width: 100%;
+    }
+    .convert-btn {
+      flex: 1;
       padding: 14px;
       border: none;
       border-radius: 8px;
@@ -182,8 +186,8 @@
   </header>
 
   <div class="hero">
-    <h1>Free YouTube to MP3 & MP4</h1>
-    <p>Convert YouTube videos to MP3 or MP4. 100% free and unlimited</p>
+    <h1>YouTube to MP3 & MP4</h1>
+    <p>Convert YouTube videos to MP3 or MP4. 100% Free</p>
   </div>
 
   <div class="card">
@@ -191,9 +195,9 @@
       <svg viewBox="0 0 24 24"><rect width="24" height="24" rx="5" fill="#FF0000"/><path d="M10 8.5L16 12L10 15.5V8.5Z" fill="white"/></svg>
       <input type="text" id="yt-url" placeholder="https://youtu.be/example" />
     </div>
-    <div class="convert-btn-group">
+    <div class="btn-group">
       <button class="convert-btn" id="convertMP3">Convert MP3 <span class="spinner" id="spinnerMP3"></span></button>
-      <button class="convert-btn" id="convertMP4">Convert MP4 <span class="spinner" id="spinnerMP4"></span></button>
+      <button class="convert-btn" id="convertMP4" style="background:#4CAF50;">Convert MP4 <span class="spinner" id="spinnerMP4"></span></button>
     </div>
     <div class="progress" id="progress">
       <div class="progress-bar"><span id="barFill"></span></div>
