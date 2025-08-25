@@ -30,17 +30,7 @@ module.exports = async (req, res) => {
       const txt = await r.text();
       return send(res, 502, { error: `Upstream failed (${r.status})`, details: txt.slice(0, 500) });
     }
-
     const data = await r.json();
-
-    // ویڈیو کی کوالٹی چیک کریں
-    const videoQuality = data?.videoQuality || '480p';  // فرض کریں کہ یہاں ویڈیو کی کوالٹی کا ڈیٹا آ رہا ہے
-    if (videoQuality === '720p') {
-      data.qualityStatus = 'High Quality';  // 720p کے لیے ہائی کوالٹی کا اسٹیٹس ایڈ کر رہا ہوں
-    } else {
-      data.qualityStatus = 'Low Quality';  // 720p نہ ہونے کی صورت میں لو کوالٹی
-    }
-
     return send(res, 200, data);
   } catch (err) {
     return send(res, 500, { error: "Server error", details: String(err && err.message || err) });
