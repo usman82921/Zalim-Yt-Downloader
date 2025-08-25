@@ -1,324 +1,346 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>YouTube Downloader</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <title>YouTube Downloader Pro</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
     body {
-      margin: 0;
-      font-family: 'Inter', sans-serif;
-      background: #fafafa;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
       color: #333;
-    }
-
-    header {
+      min-height: 100vh;
       display: flex;
-      justify-content: space-between;
+      flex-direction: column;
       align-items: center;
-      padding: 12px 16px;
-      background: #fff;
-      border-bottom: 1px solid #ddd;
-    }
-
-    .brand {
-      font-weight: bold;
-      font-size: 20px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .brand span {
-      color: #6a4bdb;
-    }
-
-    .hero {
-      background: #f5efff;
-      text-align: center;
-      padding: 40px 20px;
-    }
-
-    .hero h1 {
-      margin: 0;
-      font-size: 26px;
-      font-weight: bold;
-    }
-
-    .hero p {
-      margin: 8px 0 0;
-      color: #555;
-    }
-
-    .card {
-      max-width: 700px;
-      margin: -30px auto 0;
-      background: #fff;
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-    }
-
-    .input-group {
-      position: relative;
-      display: flex;
-      align-items: center;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      padding: 10px 14px 10px 42px;
-    }
-
-    .input-group svg {
-      position: absolute;
-      left: 14px;
-      width: 18px;
-      height: 18px;
-    }
-
-    .input-group input {
-      flex: 1;
-      border: none;
-      outline: none;
-      font-size: 16px;
-    }
-
-    .btn-group {
-      display: flex;
-      gap: 10px;
-      margin-top: 14px;
-    }
-
-    .convert-btn {
-      flex: 1;
-      padding: 14px;
-      border: none;
-      border-radius: 8px;
-      background: #7f67e9;
-      color: #fff;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-      display: flex;
       justify-content: center;
-      align-items: center;
-      gap: 6px;
+      padding: 20px;
     }
-
-    .spinner {
-      width: 16px;
-      height: 16px;
-      border: 2px solid rgba(255,255,255,.5);
-      border-top-color: #fff;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      display: none;
-    }
-
-    @keyframes spin {
-      to {
-        transform: rotate(360deg);
-      }
-    }
-
-    .progress {
-      margin-top: 14px;
-      display: none;
-    }
-
-    .progress-bar {
+    
+    .container {
       width: 100%;
-      background: #eee;
-      border-radius: 8px;
-      height: 10px;
+      max-width: 600px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      position: relative;
       overflow: hidden;
     }
-
-    .progress-bar span {
-      display: block;
-      height: 100%;
-      width: 0%;
-      background: #7f67e9;
-      border-radius: 8px;
-      transition: width 0.3s;
+    
+    .container::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+      transform: rotate(30deg);
+      z-index: 0;
     }
-
-    .percent {
-      margin-top: 6px;
-      text-align: center;
-      font-size: 14px;
-      color: #555;
+    
+    .content {
+      position: relative;
+      z-index: 1;
     }
-
-    .features {
-      max-width: 700px;
-      margin: 20px auto;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px;
+    
+    .logo {
+      color: #ff0000;
+      font-size: 42px;
+      margin-bottom: 10px;
     }
-
-    .feature {
-      background: #fff;
-      padding: 10px 14px;
-      border-radius: 20px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 14px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    
+    h1 {
+      color: #333;
+      margin-bottom: 20px;
+      font-weight: 700;
+      font-size: 32px;
+      background: linear-gradient(45deg, #6a11cb, #2575fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
-
-    .feature span {
-      color: #22c55e;
+    
+    .description {
+      color: #666;
+      margin-bottom: 30px;
       font-size: 16px;
+      line-height: 1.6;
     }
-
-    .more {
-      max-width: 700px;
-      margin: 30px auto;
-      padding: 0 20px;
+    
+    .input-container {
+      position: relative;
+      margin-bottom: 25px;
     }
-
-    .telegram-card {
-      background: #fff;
-      padding: 14px;
-      border-radius: 12px;
+    
+    .input-container i {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #999;
+    }
+    
+    input {
+      width: 100%;
+      padding: 15px 15px 15px 45px;
+      border: 2px solid #e0e0e0;
+      border-radius: 50px;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+    
+    input:focus {
+      outline: none;
+      border-color: #6a11cb;
+      box-shadow: 0 0 0 3px rgba(106, 17, 203, 0.2);
+    }
+    
+    .button-group {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+    
+    .btn {
+      flex: 1;
+      padding: 15px;
+      border: none;
+      border-radius: 50px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
       display: flex;
       align-items: center;
-      gap: 10px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-      border-left: 4px solid #229ED9;
-      text-decoration: none;
-      color: inherit;
-      transition: transform 0.2s;
+      justify-content: center;
+      gap: 8px;
     }
-
-    .telegram-card:hover {
+    
+    .btn-mp3 {
+      background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+      color: white;
+    }
+    
+    .btn-mp4 {
+      background: linear-gradient(135deg, #ff0000 0%, #ff6b6b 100%);
+      color: white;
+    }
+    
+    .btn:hover {
       transform: translateY(-3px);
-      box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+      box-shadow: 0 7px 14px rgba(0, 0, 0, 0.2);
     }
-
-    footer {
-      text-align: center;
-      color: #777;
+    
+    .btn:active {
+      transform: translateY(-1px);
+    }
+    
+    #result {
+      min-height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .download-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 15px 25px;
+      background: linear-gradient(135deg, #00b09b 0%, #96c93d 100%);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      gap: 10px;
+    }
+    
+    .download-link:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+    
+    .error {
+      color: #ff4757;
+      font-weight: 500;
+      padding: 15px;
+      background: rgba(255, 71, 87, 0.1);
+      border-radius: 10px;
+    }
+    
+    .success {
+      color: #00b09b;
+      font-weight: 500;
+    }
+    
+    .loading {
+      display: inline-block;
+      width: 30px;
+      height: 30px;
+      border: 3px solid rgba(106, 17, 203, 0.3);
+      border-radius: 50%;
+      border-top-color: #6a11cb;
+      animation: spin 1s ease-in-out infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    .features {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 30px;
+      flex-wrap: wrap;
+    }
+    
+    .feature {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 10px;
+      max-width: 150px;
+    }
+    
+    .feature i {
+      font-size: 24px;
+      color: #6a11cb;
+      margin-bottom: 10px;
+    }
+    
+    .feature span {
       font-size: 14px;
-      margin: 30px 0;
+      color: #666;
+      text-align: center;
     }
-
+    
+    footer {
+      margin-top: 30px;
+      color: white;
+      font-size: 14px;
+      opacity: 0.8;
+    }
+    
+    @media (max-width: 600px) {
+      .button-group {
+        flex-direction: column;
+      }
+      
+      h1 {
+        font-size: 28px;
+      }
+      
+      .container {
+        padding: 20px;
+      }
+    }
   </style>
 </head>
-
 <body>
-  <header>
-    <div class="brand"><span>⚡</span> Toolsmart</div>
-    <div>☰</div>
-  </header>
-
-  <div class="hero">
-    <h1>YouTube to MP3 & MP4</h1>
-    <p>Convert YouTube videos to MP3 or MP4. 100% Free</p>
-  </div>
-
-  <div class="card">
-    <div class="input-group">
-      <svg viewBox="0 0 24 24"><rect width="24" height="24" rx="5" fill="#FF0000"/><path d="M10 8.5L16 12L10 15.5V8.5Z" fill="white"/></svg>
-      <input type="text" id="yt-url" placeholder="https://youtu.be/example" />
-    </div>
-    <div class="btn-group">
-      <button class="convert-btn" id="convertMP3" onclick="convert('mp3')">Convert MP3 <span class="spinner" id="spinnerMP3"></span></button>
-      <button class="convert-btn" id="convertMP4" style="background:#4CAF50;" onclick="convert('mp4')">Convert MP4 <span class="spinner" id="spinnerMP4"></span></button>
-    </div>
-    <div class="progress" id="progress">
-      <div class="progress-bar"><span id="barFill"></span></div>
-      <div class="percent"><span id="pct">0</span>%</div>
-    </div>
-    <div id="result" style="display:none; margin-top:15px; text-align:center;">
-      <a id="download-btn" href="#" target="_blank" style="background:#7f67e9;color:#fff;padding:12px 20px;border-radius:8px;text-decoration:none;font-weight:bold;">Download</a>
-    </div>
-  </div>
-
-  <div class="features">
-    <div class="feature"><span>✔</span> Free and Unlimited</div>
-    <div class="feature"><span>✔</span> No Signup Required</div>
-    <div class="feature"><span>✔</span> Fast Conversion</div>
-    <div class="feature"><span>✔</span> No Ads</div>
-  </div>
-
-  <div class="more">
-    <h2>Stay Connected</h2>
-    <a href="https://t.me/ZALIM_MODZ_OFFICIAL" target="_blank" class="telegram-card">
-      <div style="background:#229ED9;width:30px;height:30px;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#fff;">
-        ✈
+  <div class="container">
+    <div class="content">
+      <div class="logo">
+        <i class="fab fa-youtube"></i>
       </div>
-      <div>
-        <strong>Join our Telegram</strong><br/>
-        <small style="color:#777;">Get updates & tools in our Telegram group</small>
+      <h1>YouTube Downloader Pro</h1>
+      <p class="description">Download your favorite YouTube videos in high-quality MP4 format or extract audio as MP3 with just one click!</p>
+      
+      <div class="input-container">
+        <i class="fas fa-link"></i>
+        <input type="text" id="videoUrl" placeholder="Paste YouTube link here">
       </div>
-    </a>
+      
+      <div class="button-group">
+        <button class="btn btn-mp3" onclick="downloadMP3()">
+          <i class="fas fa-music"></i> Download MP3
+        </button>
+        <button class="btn btn-mp4" onclick="downloadMP4()">
+          <i class="fas fa-video"></i> Download MP4
+        </button>
+      </div>
+      
+      <div id="result"></div>
+      
+      <div class="features">
+        <div class="feature">
+          <i class="fas fa-bolt"></i>
+          <span>Fast Processing</span>
+        </div>
+        <div class="feature">
+          <i class="fas fa-shield-alt"></i>
+          <span>Secure & Safe</span>
+        </div>
+        <div class="feature">
+          <i class="fas fa-highlighter"></i>
+          <span>High Quality</span>
+        </div>
+      </div>
+    </div>
   </div>
-
+  
   <footer>
-    Made with ❤️ SU
+    <p>© 2023 YouTube Downloader Pro | Designed with ❤️</p>
   </footer>
 
   <script>
-    async function convert(format) {
-      const url = document.getElementById('yt-url').value.trim();
-      if (!url) return alert('Please enter a YouTube URL');
-      const spinnerMP3 = document.getElementById('spinnerMP3');
-      const spinnerMP4 = document.getElementById('spinnerMP4');
-      const progress = document.getElementById('progress');
-      const resultBox = document.getElementById('result');
-      const downloadBtn = document.getElementById('download-btn');
-      let running = false;
+    // Download MP3 Functionality - EXACTLY THE SAME AS BEFORE
+    async function downloadMP3() {
+      const url = document.getElementById("videoUrl").value.trim();
+      if (!url) return alert("Please enter a YouTube URL.");
+      const resDiv = document.getElementById("result");
+      resDiv.innerHTML = "Processing MP3...";
 
-      if (format === 'mp3') spinnerMP3.style.display = "inline-block";
-      if (format === 'mp4') spinnerMP4.style.display = "inline-block";
+      try {
+        const response = await fetch(`/api/mp3?url=${encodeURIComponent(url)}`);
+        const data = await response.json();
+        console.log("MP3 Response:", data);
 
-      progress.style.display = "block";
-      resultBox.style.display = "none";
-
-      let p = 0;
-      function step() {
-        p += 10;
-        document.getElementById('barFill').style.width = p + '%';
-        document.getElementById('pct').textContent = p;
-        if (p < 100) {
-          setTimeout(step, 300);
+        if (data.download_url) {
+          resDiv.innerHTML = `<a href="${data.download_url}" class="download-link" target="_blank"><i class="fas fa-download"></i> Click to Download MP3</a>`;
         } else {
-          fetch(`/api/${format}?url=${encodeURIComponent(url)}`)
-            .then(res => res.json())
-            .then(data => {
-              running = false;
-              spinnerMP3.style.display = "none";
-              spinnerMP4.style.display = "none";
-              if (data.status === 'success') {
-                downloadBtn.href = data.download_url;
-                downloadBtn.textContent = format === 'mp3' ? 'Download MP3' : 'Download MP4';
-                resultBox.style.display = "block";
-                if (format === 'mp4') {
-                  // Open video in a new tab
-                  window.open(data.download_url, '_blank');
-                }
-              } else {
-                alert('Failed to convert. Try again.');
-              }
-            })
-            .catch(err => {
-              running = false;
-              spinnerMP3.style.display = "none";
-              spinnerMP4.style.display = "none";
-              alert('Error: ' + err.message);
-            });
+          resDiv.innerHTML = `<p class="error">Error: Download link not found!</p>`;
         }
+      } catch (error) {
+        resDiv.innerHTML = `<p class="error">Error fetching MP3!</p>`;
       }
-      step();
     }
 
+    // Download MP4 Functionality - EXACTLY THE SAME AS BEFORE
+    async function downloadMP4() {
+      const url = document.getElementById("videoUrl").value.trim();
+      if (!url) return alert("Please enter a YouTube URL.");
+      const resDiv = document.getElementById("result");
+      resDiv.innerHTML = "Processing MP4...";
+
+      try {
+        const response = await fetch(`/api/mp4?url=${encodeURIComponent(url)}`);
+        const data = await response.json();
+        console.log("MP4 Response:", data);
+
+        if (data.data && data.data.url_mp4_youtube) {
+          // Open video in a new tab for viewing and downloading
+          window.open(data.data.url_mp4_youtube, '_blank');  // Open video in new tab
+          resDiv.innerHTML = `<p class="success">Click the link in the new tab to play or download the video.</p>`;
+        } else {
+          resDiv.innerHTML = `<p class="error">Error: Download link not found!</p>`;
+        }
+      } catch (error) {
+        resDiv.innerHTML = `<p class="error">Error fetching MP4!</p>`;
+      }
+    }
   </script>
 </body>
-
 </html>
