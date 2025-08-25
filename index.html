@@ -1,100 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>YouTube Downloader</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f4f4f4;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-    }
-    .container {
-      background: #fff;
-      padding: 20px 30px;
-      border-radius: 10px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-      text-align: center;
-      width: 300px;
-    }
-    h1 {
-      font-size: 24px;
-      margin-bottom: 20px;
-    }
-    input {
-      width: 100%;
-      padding: 10px;
-      margin: 10px 0;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-      font-size: 16px;
-    }
-    button {
-      width: 100%;
-      padding: 10px;
-      background: #007bff;
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-      font-size: 16px;
-      cursor: pointer;
-      margin-top: 10px;
-    }
-    button:hover {
-      background: #0056b3;
-    }
+    body { font-family: Arial, sans-serif; text-align: center; margin: 50px; background: #f7f7f7; }
+    h1 { color: #333; }
+    .container { background: #fff; padding: 20px; border-radius: 10px; display: inline-block; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    input { width: 80%; padding: 10px; margin-top: 10px; }
+    button { padding: 10px 20px; margin: 10px; font-size: 16px; cursor: pointer; }
+    #result a { display: block; margin-top: 15px; font-weight: bold; color: #0066cc; text-decoration: none; }
   </style>
 </head>
 <body>
+  <h1>YouTube Downloader</h1>
   <div class="container">
-    <h1>YouTube Downloader</h1>
-    <input type="text" id="videoUrl" placeholder="Enter YouTube URL" />
+    <input type="text" id="videoUrl" placeholder="Paste YouTube link here">
+    <br>
     <button onclick="downloadMP3()">Download MP3</button>
     <button onclick="downloadMP4()">Download MP4</button>
+    <div id="result"></div>
   </div>
 
   <script>
-    function downloadMP3() {
+    async function downloadMP3() {
       const url = document.getElementById("videoUrl").value.trim();
-      if (!url) {
-        alert("Please enter a YouTube URL");
-        return;
+      if (!url) return alert("Please enter a YouTube URL.");
+      const resDiv = document.getElementById("result");
+      resDiv.innerHTML = "Processing MP3...";
+      
+      try {
+        const response = await fetch(`/api/mp3?url=${encodeURIComponent(url)}`);
+        const data = await response.json();
+        console.log("MP3 Response:", data);
+
+        if (data.download_url) {
+          resDiv.innerHTML = `<a href="${data.download_url}" target="_blank">Click to Download MP3</a>`;
+        } else {
+          resDiv.innerHTML = "Error: Download link not found!";
+        }
+      } catch (error) {
+        resDiv.innerHTML = "Error fetching MP3!";
       }
-      fetch(`/api/mp3?url=${encodeURIComponent(url)}`)
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.download) {
-            window.location.href = data.download;
-          } else {
-            alert("Download link not found.");
-            console.log(data);
-          }
-        })
-        .catch((err) => alert("Error: " + err));
     }
 
-    function downloadMP4() {
+    async function downloadMP4() {
       const url = document.getElementById("videoUrl").value.trim();
-      if (!url) {
-        alert("Please enter a YouTube URL");
-        return;
+      if (!url) return alert("Please enter a YouTube URL.");
+      const resDiv = document.getElementById("result");
+      resDiv.innerHTML = "Processing MP4...";
+      
+      try {
+        const response = await fetch(`/api/mp4?url=${encodeURIComponent(url)}`);
+        const data = await response.json();
+        console.log("MP4 Response:", data);
+
+        if (data.data && data.data.url_mp4_youtube) {
+          resDiv.innerHTML = `<a href="${data.data.url_mp4_youtube}" target="_blank">Click to Download MP4</a>`;
+        } else {
+          resDiv.innerHTML = "Error: Download link not found!";
+        }
+      } catch (error) {
+        resDiv.innerHTML = "Error fetching MP4!";
       }
-      fetch(`/api/mp4?url=${encodeURIComponent(url)}`)
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.download) {
-            window.location.href = data.download;
-          } else {
-            alert("Download link not found.");
-            console.log(data);
-          }
-        })
-        .catch((err) => alert("Error: " + err));
     }
   </script>
 </body>
