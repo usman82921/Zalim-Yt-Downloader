@@ -1,4 +1,5 @@
-const MP4_API = "https://ytvideownloader.ytansh038.workers.dev/?url=";
+// api/mp4.js
+const MP4_API = "https://youtube.anshppt19.workers.dev/anshapi?url=";
 
 function send(res, code, data) {
   res.setHeader("Content-Type", "application/json");
@@ -29,17 +30,18 @@ module.exports = async (req, res) => {
       const txt = await r.text();
       return send(res, 502, { error: `Upstream failed (${r.status})`, details: txt.slice(0, 500) });
     }
-    
+
     const data = await r.json();
-    
-    // 720p ریزولوشن تلاش کریں
-    let video720p = data.formats.find(format => format.resolution === '720p');
-    if (!video720p) {
-      return send(res, 404, { error: "720p resolution not available" });
+
+    // ویڈیو کی کوالٹی چیک کریں
+    const videoQuality = data?.videoQuality || '480p';  // فرض کریں کہ یہاں ویڈیو کی کوالٹی کا ڈیٹا آ رہا ہے
+    if (videoQuality === '720p') {
+      data.qualityStatus = 'High Quality';  // 720p کے لیے ہائی کوالٹی کا اسٹیٹس ایڈ کر رہا ہوں
+    } else {
+      data.qualityStatus = 'Low Quality';  // 720p نہ ہونے کی صورت میں لو کوالٹی
     }
 
-    // 720p ویڈیو کی معلومات واپس بھیجنا
-    return send(res, 200, { videoUrl: video720p.url, resolution: "720p" });
+    return send(res, 200, data);
   } catch (err) {
     return send(res, 500, { error: "Server error", details: String(err && err.message || err) });
   }
