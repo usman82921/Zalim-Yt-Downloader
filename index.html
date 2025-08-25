@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YouTube Downloader</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+    button { margin: 10px; padding: 10px 20px; font-size: 18px; }
+    .box { display: none; margin-top: 20px; }
+    input { width: 80%; padding: 10px; margin: 10px 0; }
+    #downloadLink { margin-top: 20px; display: block; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>YouTube Downloader</h1>
+  <p>Select format:</p>
+  <button onclick="showBox('mp3')">Download MP3</button>
+  <button onclick="showBox('mp4')">Download MP4</button>
+
+  <!-- MP3 Box -->
+  <div id="mp3Box" class="box">
+    <h3>Convert to MP3</h3>
+    <input type="text" id="mp3Url" placeholder="Enter YouTube URL">
+    <button onclick="downloadFile('mp3')">Download MP3</button>
+    <a id="mp3DownloadLink" href="#" target="_blank"></a>
+  </div>
+
+  <!-- MP4 Box -->
+  <div id="mp4Box" class="box">
+    <h3>Convert to MP4</h3>
+    <input type="text" id="mp4Url" placeholder="Enter YouTube URL">
+    <button onclick="downloadFile('mp4')">Download MP4</button>
+    <a id="mp4DownloadLink" href="#" target="_blank"></a>
+  </div>
+
+  <script>
+    function showBox(type) {
+      document.getElementById('mp3Box').style.display = (type === 'mp3') ? 'block' : 'none';
+      document.getElementById('mp4Box').style.display = (type === 'mp4') ? 'block' : 'none';
+    }
+
+    async function downloadFile(type) {
+      const url = document.getElementById(type + 'Url').value;
+      if (!url) return alert('Please enter a YouTube URL');
+
+      const response = await fetch(`/api/${type}?url=${encodeURIComponent(url)}`);
+      const data = await response.json();
+
+      if (data.error) {
+        alert('Error: ' + data.error);
+        return;
+      }
+
+      const linkElement = document.getElementById(type + 'DownloadLink');
+      linkElement.href = data.link || data.download || '#';
+      linkElement.textContent = `Click here to download ${type.toUpperCase()}`;
+    }
+  </script>
+</body>
+</html>

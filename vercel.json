@@ -1,0 +1,11 @@
+{
+  "functions": {
+    "api/*.js": {
+      "runtime": "nodejs18.x"
+    }
+  },
+  "routes": [
+    { "src": "/api/mp3", "dest": "/api/mp3.js" },
+    { "src": "/api/mp4", "dest": "/api/mp4.js" }
+  ]
+}
