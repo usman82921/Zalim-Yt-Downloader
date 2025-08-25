@@ -1,4 +1,4 @@
-const MP4_API = "https://youtube.anshppt19.workers.dev/anshapi?url=";
+const MP4_API = "https://ytvideownloader.ytansh038.workers.dev/?url=";
 
 function send(res, code, data) {
   res.setHeader("Content-Type", "application/json");
