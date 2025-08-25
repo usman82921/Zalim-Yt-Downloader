@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -225,11 +224,11 @@
   <div class="card">
     <div class="input-group">
       <svg viewBox="0 0 24 24"><rect width="24" height="24" rx="5" fill="#FF0000"/><path d="M10 8.5L16 12L10 15.5V8.5Z" fill="white"/></svg>
-      <input type="text" id="videoUrl" placeholder="https://youtu.be/example" />
+      <input type="text" id="yt-url" placeholder="https://youtu.be/example" />
     </div>
     <div class="btn-group">
-      <button class="convert-btn" id="convertMP3" onclick="downloadMP3()">Convert MP3 <span class="spinner" id="spinnerMP3"></span></button>
-      <button class="convert-btn" id="convertMP4" style="background:#4CAF50;" onclick="downloadMP4()">Convert MP4 <span class="spinner" id="spinnerMP4"></span></button>
+      <button class="convert-btn" id="convertMP3" onclick="convert('mp3')">Convert MP3 <span class="spinner" id="spinnerMP3"></span></button>
+      <button class="convert-btn" id="convertMP4" style="background:#4CAF50;" onclick="convert('mp4')">Convert MP4 <span class="spinner" id="spinnerMP4"></span></button>
     </div>
     <div class="progress" id="progress">
       <div class="progress-bar"><span id="barFill"></span></div>
@@ -265,52 +264,68 @@
   </footer>
 
   <script>
-    async function downloadMP3() {
-      const url = document.getElementById("videoUrl").value.trim();
-      if (!url) return alert("Please enter a YouTube URL.");
-      const resDiv = document.getElementById("result");
-      resDiv.innerHTML = "Processing MP3...";
-      const spinnerMP3 = document.getElementById('spinnerMP3');
-      spinnerMP3.style.display = 'inline-block';
+    const mp3Btn = document.getElementById('convertMP3');
+    const mp4Btn = document.getElementById('convertMP4');
+    const spinnerMP3 = document.getElementById('spinnerMP3');
+    const spinnerMP4 = document.getElementById('spinnerMP4');
+    const progress = document.getElementById('progress');
+    const barFill = document.getElementById('barFill');
+    const pct = document.getElementById('pct');
+    const resultBox = document.getElementById('result');
+    const downloadBtn = document.getElementById('download-btn');
+    let running = false;
 
-      try {
-        const response = await fetch(`/api/mp3?url=${encodeURIComponent(url)}`);
-        const data = await response.json();
-        if (data.download_url) {
-          resDiv.innerHTML = `<a href="${data.download_url}" target="_blank">Click to Download MP3</a>`;
+    function convert(format) {
+      const url = document.getElementById('yt-url').value.trim();
+      if (!url) return alert('Please enter a YouTube URL');
+      if (running) return;
+      running = true;
+
+      if (format === 'mp3') spinnerMP3.style.display = "inline-block";
+      if (format === 'mp4') spinnerMP4.style.display = "inline-block";
+
+      progress.style.display = "block";
+      resultBox.style.display = "none";
+
+      let p = 0;
+      function step() {
+        p += 10;
+        barFill.style.width = p + '%';
+        pct.textContent = p;
+        if (p < 100) {
+          setTimeout(step, 300);
         } else {
-          resDiv.innerHTML = `<p class="error">Error: Download link not found!</p>`;
+          fetch(`/api/${format}?url=${encodeURIComponent(url)}`)
+            .then(res => res.json())
+            .then(data => {
+              running = false;
+              spinnerMP3.style.display = "none";
+              spinnerMP4.style.display = "none";
+              if (data.status === 'success') {
+                downloadBtn.href = data.download_url;
+                downloadBtn.textContent = format === 'mp3' ? 'Download MP3' : 'Download MP4';
+                resultBox.style.display = "block";
+                if (format === 'mp4') {
+                  // Open video in a new tab
+                  window.open(data.download_url, '_blank');
+                }
+              } else {
+                alert('Failed to convert. Try again.');
+              }
+            })
+            .catch(err => {
+              running = false;
+              spinnerMP3.style.display = "none";
+              spinnerMP4.style.display = "none";
+              alert('Error: ' + err.message);
+            });
         }
-      } catch (error) {
-        resDiv.innerHTML = `<p class="error">Error fetching MP3!</p>`;
       }
-      spinnerMP3.style.display = 'none';
+      step();
     }
 
-    async function downloadMP4() {
-      const url = document.getElementById("videoUrl").value.trim();
-      if (!url) return alert("Please enter a YouTube URL.");
-      const resDiv = document.getElementById("result");
-      resDiv.innerHTML = "Processing MP4...";
-      const spinnerMP4 = document.getElementById('spinnerMP4');
-      spinnerMP4.style.display = 'inline-block';
-
-      try {
-        const response = await fetch(`/api/mp4?url=${encodeURIComponent(url)}`);
-        const data = await response.json();
-        if (data.data && data.data.url_mp4_youtube) {
-          // Open video in new tab for viewing
-          window.open(data.data.url_mp4_youtube, '_blank');
-          resDiv.innerHTML = `<p>Click the link in the new tab to play or download the video.</p>`;
-        } else {
-          resDiv.innerHTML = `<p class="error">Error: Download link not found!</p>`;
-        }
-      } catch (error) {
-        resDiv.innerHTML = `<p class="error">Error fetching MP4!</p>`;
-      }
-      spinnerMP4.style.display = 'none';
-    }
+    mp3Btn.addEventListener('click', () => convert('mp3'));
+    mp4Btn.addEventListener('click', () => convert('mp4'));
   </script>
 </body>
-
 </html>
