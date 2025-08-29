@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YouTube Downloader Pro</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Same CSS - unchanged */
+    * {margin: 0;padding: 0;box-sizing: border-box;}
+    body {font-family: 'Poppins', sans-serif;background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);color: #333;min-height: 100vh;display: flex;flex-direction: column;align-items: center;justify-content: center;padding: 20px;}
+    .container {width: 100%;max-width: 600px;background: rgba(255, 255, 255, 0.95);backdrop-filter: blur(10px);border-radius: 20px;padding: 30px;box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);text-align: center;position: relative;overflow: hidden;}
+    .container::before {content: '';position: absolute;top: -50%;left: -50%;width: 200%;height: 200%;background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);transform: rotate(30deg);z-index: 0;}
+    .content {position: relative;z-index: 1;}
+    .logo {color: #ff0000;font-size: 42px;margin-bottom: 10px;}
+    h1 {color: #333;margin-bottom: 20px;font-weight: 700;font-size: 32px;background: linear-gradient(45deg, #6a11cb, #2575fc);-webkit-background-clip: text;-webkit-text-fill-color: transparent;}
+    .description {color: #666;margin-bottom: 30px;font-size: 16px;line-height: 1.6;}
+    .input-container {position: relative;margin-bottom: 25px;}
+    .input-container i {position: absolute;left: 15px;top: 50%;transform: translateY(-50%);color: #999;}
+    input {width: 100%;padding: 15px 15px 15px 45px;border: 2px solid #e0e0e0;border-radius: 50px;font-size: 16px;transition: all 0.3s ease;}
+    input:focus {outline: none;border-color: #6a11cb;box-shadow: 0 0 0 3px rgba(106, 17, 203, 0.2);}
+    .button-group {display: flex;gap: 15px;margin-bottom: 20px;}
+    .btn {flex: 1;padding: 15px;border: none;border-radius: 50px;font-size: 16px;font-weight: 600;cursor: pointer;transition: all 0.3s ease;display: flex;align-items: center;justify-content: center;gap: 8px;}
+    .btn-mp3 {background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);color: white;}
+    .btn-mp4 {background: linear-gradient(135deg, #ff0000 0%, #ff6b6b 100%);color: white;}
+    .btn-telegram {background: linear-gradient(135deg, #0088cc 0%, #34b7f1 100%);color: white;padding: 12px 20px;text-decoration: none;display: inline-flex;align-items: center;gap: 8px;border-radius: 50px;font-weight: 600;font-size: 14px;box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);transition: all 0.3s ease;margin-top: 15px;}
+    .btn:hover, .btn-telegram:hover {transform: translateY(-3px);box-shadow: 0 7px 14px rgba(0, 0, 0, 0.2);}
+    .btn:active, .btn-telegram:active {transform: translateY(-1px);}
+    #result {min-height: 100px;display: flex;align-items: center;justify-content: center;flex-direction: column;}
+    .download-link {display: flex;align-items: center;justify-content: center;padding: 15px 25px;background: linear-gradient(135deg, #00b09b 0%, #96c93d 100%);color: white;text-decoration: none;border-radius: 50px;font-weight: 600;transition: all 0.3s ease;box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);gap: 10px;margin-bottom: 10px;}
+    .download-link:hover {transform: translateY(-3px);box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);}
+    .error {color: #ff4757;font-weight: 500;padding: 15px;background: rgba(255, 71, 87, 0.1);border-radius: 10px;}
+    .success {color: #00b09b;font-weight: 500;text-align: center;}
+    .loading {display: inline-block;width: 30px;height: 30px;border: 3px solid rgba(106, 17, 203, 0.3);border-radius: 50%;border-top-color: #6a11cb;animation: spin 1s ease-in-out infinite;}
+    @keyframes spin {to { transform: rotate(360deg); }}
+    footer {margin-top: 25px;color: white;font-size: 14px;opacity: 0.8;display: flex;flex-direction: column;align-items: center;gap: 10px;}
+    .emoji {font-size: 18px;margin: 0 2px;}
+    @media (max-width: 600px) {.button-group {flex-direction: column;} h1 {font-size: 28px;} .container {padding: 20px;}}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="content">
+      <div class="logo"><i class="fab fa-youtube"></i></div>
+      <h1>YouTube Downloader Pro</h1>
+      <p class="description">Download your favorite YouTube videos in high-quality MP4 format or extract audio as MP3 with just one click!</p>
+      
+      <div class="input-container">
+        <i class="fas fa-link"></i>
+        <input type="text" id="videoUrl" placeholder="Paste YouTube link here">
+      </div>
+      
+      <div class="button-group">
+        <button class="btn btn-mp3" onclick="downloadMP3()"><i class="fas fa-music"></i> Download MP3</button>
+        <button class="btn btn-mp4" onclick="downloadMP4()"><i class="fas fa-video"></i> Download MP4</button>
+      </div>
+      
+      <div id="result"></div>
+      
+      <a href="https://t.me/ZALIM_MODZ_OFFICIAL" class="btn-telegram" target="_blank"><i class="fab fa-telegram"></i> Join Our Telegram</a>
+    </div>
+  </div>
+  
+  <footer>
+    <p>© 2025 YouTube Downloader Pro | ZALIM MODZ <span class="emoji">&#10084;&#65039;</span></p>
+  </footer>
+
+  <script>
+    // ✅ MP3 unchanged (Direct API)
+    async function downloadMP3() {
+      const url = document.getElementById("videoUrl").value.trim();
+      if (!url) return alert("Please enter a YouTube URL.");
+      const resDiv = document.getElementById("result");
+      resDiv.innerHTML = "<div class='loading'></div><p>Processing MP3...</p>";
+
+      try {
+        const response = await fetch(`/api/mp3?url=${encodeURIComponent(url)}`);
+        const data = await response.json();
+        console.log("MP3 Response:", data);
+
+        if (data.download_url) {
+          resDiv.innerHTML = `<a href="${data.download_url}" class="download-link" download><i class="fas fa-download"></i> Click to Download MP3</a>`;
+        } else {
+          resDiv.innerHTML = "<p class='error'>Error: Download link not found!</p>";
+        }
+      } catch (error) {
+        resDiv.innerHTML = "<p class='error'>Error fetching MP3! Please try again.</p>";
+      }
+    }
+
+    // ✅ MP4 with polling (No change from last)
+    async function downloadMP4() {
+      const url = document.getElementById("videoUrl").value.trim();
+      if (!url) return alert("Please enter a YouTube URL.");
+      const resDiv = document.getElementById("result");
+      resDiv.innerHTML = "<div class='loading'></div><p>Processing MP4...</p>";
+
+      try {
+        const response = await fetch(`/api/mp4?url=${encodeURIComponent(url)}`);
+        const data = await response.json();
+        console.log("Initial MP4 Response:", data);
+
+        if (!data.instructions || !data.instructions.polling_endpoint) {
+          resDiv.innerHTML = "<p class='error'>Error: Polling endpoint not found!</p>";
+          return;
+        }
+
+        const pollUrl = data.instructions.polling_endpoint;
+        let downloadUrl = null;
+
+        for (let i = 0; i < 15; i++) {
+          const pollRes = await fetch(pollUrl);
+          const pollData = await pollRes.json();
+          console.log("Polling Response:", pollData);
+
+          if (pollData.download_url) {
+            downloadUrl = pollData.download_url;
+            break;
+          }
+
+          await new Promise(r => setTimeout(r, 3000));
+        }
+
+        if (downloadUrl) {
+          resDiv.innerHTML = `<a href="${downloadUrl}" class="download-link" download><i class="fas fa-download"></i> Click to Download MP4</a>`;
+        } else {
+          resDiv.innerHTML = "<p class='error'>Error: Download link not found after processing!</p>";
+        }
+
+      } catch (error) {
+        resDiv.innerHTML = "<p class='error'>Error fetching MP4! Please try again.</p>";
+      }
+    }
+  </script>
+</body>
+</html>
