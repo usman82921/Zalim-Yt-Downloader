@@ -1,5 +1,4 @@
-// api/mp4.js
-const MP4_API = "https://youtube.anshppt19.workers.dev/anshapi?url=";
+const MP4_API = "https://chathuraytdl.netlify.app/.netlify/functions/ytdl?url=";
 
 function send(res, code, data) {
   res.setHeader("Content-Type", "application/json");
@@ -24,12 +23,13 @@ module.exports = async (req, res) => {
     }
 
     const apiUrl = MP4_API + encodeURIComponent(url);
-
     const r = await fetch(apiUrl, { method: "GET" });
+
     if (!r.ok) {
       const txt = await r.text();
       return send(res, 502, { error: `Upstream failed (${r.status})`, details: txt.slice(0, 500) });
     }
+
     const data = await r.json();
     return send(res, 200, data);
   } catch (err) {
